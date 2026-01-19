@@ -13,12 +13,13 @@ from sars.routes.tax import tax_bp
 def create_app():
     app = Flask(__name__)
 
-    # Configure CORS to allow your GitHub Pages site
+    # Configure CORS to allow your GitHub Pages site and Render domain
     CORS(app, origins=[
         "https://rivobcompnany.github.io",
+        "https://tax-calculator-flaskbackend.onrender.com",  # Allow Render backend
         "http://localhost:*",  # for local development
         "http://127.0.0.1:*"
-    ])
+    ], supports_credentials=True)
     
     app.register_blueprint(tax_bp, url_prefix='/api')
     
