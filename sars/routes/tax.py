@@ -92,9 +92,14 @@ def calculate_tax():
     except Exception as e:
         return jsonify({"error": "Calculation failed", "detail": str(e)}), 400
 
-# New alias route so frontend can POST to /api/calculate with { income }
-@tax_bp.route("/calculate", methods=["POST"])
+@tax_bp.route("/calculate", methods=["POST", "OPTIONS", "GET"])
 def calculate_tax_api():
+    # Respond to preflight / health checks quickly
+    if request.method == "OPTIONS":
+        return jsonify({"status": "ok"}), 200
+    if request.method == "GET":
+        return jsonify({"message": "POST JSON { income } to calculate tax"}), 200
+
     try:
         payload = request.get_json() or {}
         # frontend sample sends { income } — map that to ctc_annual if not provided
